@@ -121,6 +121,19 @@
       background: rgba(201,149,58,0.25);
     }
 
+    .lock-key.flash {
+      background: rgba(201,149,58,0.55);
+      border-color: #c9953a;
+      box-shadow: 0 0 18px rgba(201,149,58,0.6);
+      color: #ffd97a;
+      animation: keyflash 0.3s ease forwards;
+    }
+
+    @keyframes keyflash {
+      0%   { background: rgba(201,149,58,0.65); box-shadow: 0 0 22px rgba(201,149,58,0.8); }
+      100% { background: rgba(255,255,255,0.04); box-shadow: none; }
+    }
+
     .lock-key.del {
       color: rgba(201,149,58,0.7);
       font-size: 20px;
@@ -532,17 +545,17 @@
     </div>
     <div class="lock-error" id="lock-error"></div>
     <div class="lock-numpad">
-      <button class="lock-key" onclick="lockPress('1')">1</button>
-      <button class="lock-key" onclick="lockPress('2')">2</button>
-      <button class="lock-key" onclick="lockPress('3')">3</button>
-      <button class="lock-key" onclick="lockPress('4')">4</button>
-      <button class="lock-key" onclick="lockPress('5')">5</button>
-      <button class="lock-key" onclick="lockPress('6')">6</button>
-      <button class="lock-key" onclick="lockPress('7')">7</button>
-      <button class="lock-key" onclick="lockPress('8')">8</button>
-      <button class="lock-key" onclick="lockPress('9')">9</button>
-      <button class="lock-key del" onclick="lockDel()">⌫</button>
-      <button class="lock-key zero" onclick="lockPress('0')">0</button>
+      <button class="lock-key" onclick="lockPress('1',this)">1</button>
+      <button class="lock-key" onclick="lockPress('2',this)">2</button>
+      <button class="lock-key" onclick="lockPress('3',this)">3</button>
+      <button class="lock-key" onclick="lockPress('4',this)">4</button>
+      <button class="lock-key" onclick="lockPress('5',this)">5</button>
+      <button class="lock-key" onclick="lockPress('6',this)">6</button>
+      <button class="lock-key" onclick="lockPress('7',this)">7</button>
+      <button class="lock-key" onclick="lockPress('8',this)">8</button>
+      <button class="lock-key" onclick="lockPress('9',this)">9</button>
+      <button class="lock-key del" onclick="lockDel(this)">⌫</button>
+      <button class="lock-key zero" onclick="lockPress('0',this)">0</button>
     </div>
   </div>
 </div>
@@ -678,8 +691,17 @@
   const CORRECT = '272727';
   let lockInput = '';
 
-  function lockPress(n) {
+  function flashBtn(btn) {
+    if (!btn) return;
+    btn.classList.remove('flash');
+    void btn.offsetWidth; // reflow
+    btn.classList.add('flash');
+    btn.addEventListener('animationend', () => btn.classList.remove('flash'), { once: true });
+  }
+
+  function lockPress(n, btn) {
     if (lockInput.length >= 6) return;
+    flashBtn(btn);
     lockInput += n;
     document.getElementById(`dot-${lockInput.length - 1}`).classList.add('filled');
     if (lockInput.length === 6) {
@@ -690,7 +712,6 @@
           document.getElementById('lock-error').textContent = '密码错误，请重试';
           document.querySelectorAll('.lock-dot').forEach(d => d.classList.remove('filled'));
           lockInput = '';
-          // re-trigger animation
           const err = document.getElementById('lock-error');
           err.style.animation = 'none';
           void err.offsetWidth;
@@ -700,8 +721,9 @@
     }
   }
 
-  function lockDel() {
+  function lockDel(btn) {
     if (lockInput.length === 0) return;
+    flashBtn(btn);
     document.getElementById(`dot-${lockInput.length - 1}`).classList.remove('filled');
     lockInput = lockInput.slice(0, -1);
     document.getElementById('lock-error').textContent = '';
@@ -710,8 +732,17 @@
   // 支持键盘输入密码
   document.addEventListener('keydown', e => {
     if (document.getElementById('lock-screen').classList.contains('hidden')) return;
-    if (e.key >= '0' && e.key <= '9') lockPress(e.key);
-    if (e.key === 'Backspace') lockDel();
+    if (e.key >= '0' && e.key <= '9') {
+      // 找到对应按钮做闪光
+      const btns = document.querySelectorAll('.lock-key');
+      let target = null;
+      btns.forEach(b => { if (b.textContent.trim() === e.key) target = b; });
+      lockPress(e.key, target);
+    }
+    if (e.key === 'Backspace') {
+      const delBtn = document.querySelector('.lock-key.del');
+      lockDel(delBtn);
+    }
   });
 
   // ======= 扑克时钟 =======
