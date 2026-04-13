@@ -395,31 +395,100 @@
     .chips-row {
       display: flex;
       justify-content: center;
-      gap: 12px;
-      margin: 6px 0 12px;
+      gap: 10px;
+      margin: 6px 0 10px;
     }
 
     .chip {
-      width: 52px;
-      height: 52px;
+      width: 66px;
+      height: 66px;
       border-radius: 50%;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      border: 3px dashed rgba(255,255,255,0.5);
-      text-align: center;
-      line-height: 1.1;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+      box-shadow: 0 5px 16px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4);
       user-select: none;
+      flex-shrink: 0;
     }
 
-    .c100   { background: #8b1a1a; color: #fff; }
-    .c1000  { background: #1a3d8b; border-color: #c9953a; color: #c9953a; }
-    .c5000  { background: #1a5c1a; color: #fff; }
-    .c20000 { background: #4a1a7a; border-color: #c9953a; color: #c9953a; }
+    .chip-face {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chip-num  { font-size: 21px; font-weight: 900; line-height: 1; letter-spacing: -1px; }
+    .chip-nuts { font-size: 6.5px; font-weight: 700; letter-spacing: 1.2px; }
+    .chip-val  { font-size: 8px; font-weight: 600; opacity: 0.75; margin-top: 1px; letter-spacing: 0.5px; }
+
+    /* ─ 银色 ─ */
+    .c-silver {
+      background: conic-gradient(
+        #636e78 0deg 15deg,#b8c2cc 15deg 30deg,#636e78 30deg 45deg,#b8c2cc 45deg 60deg,
+        #636e78 60deg 75deg,#b8c2cc 75deg 90deg,#636e78 90deg 105deg,#b8c2cc 105deg 120deg,
+        #636e78 120deg 135deg,#b8c2cc 135deg 150deg,#636e78 150deg 165deg,#b8c2cc 165deg 180deg,
+        #636e78 180deg 195deg,#b8c2cc 195deg 210deg,#636e78 210deg 225deg,#b8c2cc 225deg 240deg,
+        #636e78 240deg 255deg,#b8c2cc 255deg 270deg,#636e78 270deg 285deg,#b8c2cc 285deg 300deg,
+        #636e78 300deg 315deg,#b8c2cc 315deg 330deg,#636e78 330deg 345deg,#b8c2cc 345deg 360deg
+      );
+    }
+    .c-silver .chip-face { background: radial-gradient(circle at 35% 30%, #d2dae2, #98a4ae); box-shadow: inset 0 2px 5px rgba(255,255,255,0.45), inset 0 -2px 4px rgba(0,0,0,0.2); }
+    .c-silver .chip-num  { color: #1a2230; }
+    .c-silver .chip-nuts { color: #2a3440; }
+    .c-silver .chip-val  { color: #2a3440; }
+
+    /* ─ 橙金 ─ */
+    .c-orange {
+      background: conic-gradient(
+        #7a3c10 0deg 15deg,#e8984a 15deg 30deg,#7a3c10 30deg 45deg,#e8984a 45deg 60deg,
+        #7a3c10 60deg 75deg,#e8984a 75deg 90deg,#7a3c10 90deg 105deg,#e8984a 105deg 120deg,
+        #7a3c10 120deg 135deg,#e8984a 135deg 150deg,#7a3c10 150deg 165deg,#e8984a 165deg 180deg,
+        #7a3c10 180deg 195deg,#e8984a 195deg 210deg,#7a3c10 210deg 225deg,#e8984a 225deg 240deg,
+        #7a3c10 240deg 255deg,#e8984a 255deg 270deg,#7a3c10 270deg 285deg,#e8984a 285deg 300deg,
+        #7a3c10 300deg 315deg,#e8984a 315deg 330deg,#7a3c10 330deg 345deg,#e8984a 345deg 360deg
+      );
+    }
+    .c-orange .chip-face { background: radial-gradient(circle at 35% 30%, #f0a860, #c07028); box-shadow: inset 0 2px 5px rgba(255,220,140,0.45), inset 0 -2px 4px rgba(0,0,0,0.25); }
+    .c-orange .chip-num  { color: #fff8ee; }
+    .c-orange .chip-nuts { color: #ffe8c0; }
+    .c-orange .chip-val  { color: #ffe8c0; }
+
+    /* ─ 玫红 ─ */
+    .c-red {
+      background: conic-gradient(
+        #6e0820 0deg 15deg,#d85878 15deg 30deg,#6e0820 30deg 45deg,#d85878 45deg 60deg,
+        #6e0820 60deg 75deg,#d85878 75deg 90deg,#6e0820 90deg 105deg,#d85878 105deg 120deg,
+        #6e0820 120deg 135deg,#d85878 135deg 150deg,#6e0820 150deg 165deg,#d85878 165deg 180deg,
+        #6e0820 180deg 195deg,#d85878 195deg 210deg,#6e0820 210deg 225deg,#d85878 225deg 240deg,
+        #6e0820 240deg 255deg,#d85878 255deg 270deg,#6e0820 270deg 285deg,#d85878 285deg 300deg,
+        #6e0820 300deg 315deg,#d85878 315deg 330deg,#6e0820 330deg 345deg,#d85878 345deg 360deg
+      );
+    }
+    .c-red .chip-face { background: radial-gradient(circle at 35% 30%, #e87090, #b02848); box-shadow: inset 0 2px 5px rgba(255,180,180,0.35), inset 0 -2px 4px rgba(0,0,0,0.25); }
+    .c-red .chip-num  { color: #fff0f4; }
+    .c-red .chip-nuts { color: #ffd8e0; }
+    .c-red .chip-val  { color: #ffd8e0; }
+
+    /* ─ 薰衣草紫 ─ */
+    .c-purple {
+      background: conic-gradient(
+        #383870 0deg 15deg,#9898d0 15deg 30deg,#383870 30deg 45deg,#9898d0 45deg 60deg,
+        #383870 60deg 75deg,#9898d0 75deg 90deg,#383870 90deg 105deg,#9898d0 105deg 120deg,
+        #383870 120deg 135deg,#9898d0 135deg 150deg,#383870 150deg 165deg,#9898d0 165deg 180deg,
+        #383870 180deg 195deg,#9898d0 195deg 210deg,#383870 210deg 225deg,#9898d0 225deg 240deg,
+        #383870 240deg 255deg,#9898d0 255deg 270deg,#383870 270deg 285deg,#9898d0 285deg 300deg,
+        #383870 300deg 315deg,#9898d0 315deg 330deg,#383870 330deg 345deg,#9898d0 345deg 360deg
+      );
+    }
+    .c-purple .chip-face { background: radial-gradient(circle at 35% 30%, #b0b0e0, #6868a0); box-shadow: inset 0 2px 5px rgba(200,200,255,0.35), inset 0 -2px 4px rgba(0,0,0,0.25); }
+    .c-purple .chip-num  { color: #f8f8ff; }
+    .c-purple .chip-nuts { color: #e0e0ff; }
+    .c-purple .chip-val  { color: #e0e0ff; }
 
     /* ── 控制按钮 ── */
     .controls {
@@ -601,10 +670,10 @@
     </div>
 
     <div class="chips-row">
-      <div class="chip c100">100</div>
-      <div class="chip c1000">1000</div>
-      <div class="chip c5000">5000</div>
-      <div class="chip c20000">20000</div>
+      <div class="chip c-silver"><div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">100</div></div></div>
+      <div class="chip c-orange"><div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">1000</div></div></div>
+      <div class="chip c-red">   <div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">5000</div></div></div>
+      <div class="chip c-purple"><div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">20000</div></div></div>
     </div>
 
     <div class="controls">
@@ -661,10 +730,10 @@
     </div>
 
     <div class="chips-row">
-      <div class="chip c100">100</div>
-      <div class="chip c1000">1000</div>
-      <div class="chip c5000">5000</div>
-      <div class="chip c20000">20000</div>
+      <div class="chip c-silver"><div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">100</div></div></div>
+      <div class="chip c-orange"><div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">1000</div></div></div>
+      <div class="chip c-red">   <div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">5000</div></div></div>
+      <div class="chip c-purple"><div class="chip-face"><div class="chip-num">27</div><div class="chip-nuts">NUTS·BAR</div><div class="chip-val">20000</div></div></div>
     </div>
 
     <div class="controls">
