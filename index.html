@@ -9,6 +9,144 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ── 密码锁屏 ── */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: #0c0c0c;
+      background-image:
+        repeating-linear-gradient(45deg,  rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 6px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #lock-screen.hidden { display: none; }
+
+    .lock-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 48px 40px;
+      border: 1px solid rgba(201,149,58,0.45);
+      border-radius: 18px;
+      background: linear-gradient(170deg,#141414,#1a1a1a);
+      box-shadow: 0 0 0 1px rgba(201,149,58,0.1), 0 20px 60px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .lock-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(90deg, transparent, #c9953a, #ffd97a, #c9953a, transparent);
+    }
+
+    .lock-logo {
+      color: #c9953a;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      text-shadow: 0 0 20px rgba(201,149,58,0.7);
+    }
+
+    .lock-icon {
+      font-size: 40px;
+      opacity: 0.8;
+    }
+
+    .lock-label {
+      color: rgba(201,149,58,0.6);
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .lock-dots {
+      display: flex;
+      gap: 14px;
+    }
+
+    .lock-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid rgba(201,149,58,0.4);
+      background: transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .lock-dot.filled {
+      background: #c9953a;
+      border-color: #c9953a;
+      box-shadow: 0 0 8px rgba(201,149,58,0.6);
+    }
+
+    .lock-numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .lock-key {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,149,58,0.3);
+      background: rgba(255,255,255,0.04);
+      color: #f5f0e8;
+      font-family: 'Oswald', sans-serif;
+      font-size: 26px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s, transform 0.1s, box-shadow 0.12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lock-key:hover {
+      background: rgba(201,149,58,0.15);
+      border-color: rgba(201,149,58,0.6);
+    }
+
+    .lock-key:active {
+      transform: scale(0.92);
+      background: rgba(201,149,58,0.25);
+    }
+
+    .lock-key.del {
+      color: rgba(201,149,58,0.7);
+      font-size: 20px;
+    }
+
+    .lock-key.zero {
+      grid-column: 2;
+    }
+
+    .lock-error {
+      color: #e05a3a;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      height: 18px;
+      animation: shake 0.35s ease;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-6px); }
+      80%      { transform: translateX(6px); }
+    }
+
     /* ── 底色：黑色桌布质感 ── */
     body {
       background-color: #0c0c0c;
@@ -378,6 +516,37 @@
 </head>
 <body>
 
+<!-- ========== 密码锁屏 ========== -->
+<div id="lock-screen">
+  <div class="lock-box">
+    <div class="lock-logo">27 NUTS</div>
+    <div class="lock-icon">🔒</div>
+    <div class="lock-label">请输入密码</div>
+    <div class="lock-dots">
+      <div class="lock-dot" id="dot-0"></div>
+      <div class="lock-dot" id="dot-1"></div>
+      <div class="lock-dot" id="dot-2"></div>
+      <div class="lock-dot" id="dot-3"></div>
+      <div class="lock-dot" id="dot-4"></div>
+      <div class="lock-dot" id="dot-5"></div>
+    </div>
+    <div class="lock-error" id="lock-error"></div>
+    <div class="lock-numpad">
+      <button class="lock-key" onclick="lockPress('1')">1</button>
+      <button class="lock-key" onclick="lockPress('2')">2</button>
+      <button class="lock-key" onclick="lockPress('3')">3</button>
+      <button class="lock-key" onclick="lockPress('4')">4</button>
+      <button class="lock-key" onclick="lockPress('5')">5</button>
+      <button class="lock-key" onclick="lockPress('6')">6</button>
+      <button class="lock-key" onclick="lockPress('7')">7</button>
+      <button class="lock-key" onclick="lockPress('8')">8</button>
+      <button class="lock-key" onclick="lockPress('9')">9</button>
+      <button class="lock-key del" onclick="lockDel()">⌫</button>
+      <button class="lock-key zero" onclick="lockPress('0')">0</button>
+    </div>
+  </div>
+</div>
+
 <div class="page-title">27 NUTS · BAR</div>
 
 <div class="tables-container">
@@ -505,6 +674,47 @@
 </div>
 
 <script>
+  // ======= 密码锁 =======
+  const CORRECT = '272727';
+  let lockInput = '';
+
+  function lockPress(n) {
+    if (lockInput.length >= 6) return;
+    lockInput += n;
+    document.getElementById(`dot-${lockInput.length - 1}`).classList.add('filled');
+    if (lockInput.length === 6) {
+      setTimeout(() => {
+        if (lockInput === CORRECT) {
+          document.getElementById('lock-screen').classList.add('hidden');
+        } else {
+          document.getElementById('lock-error').textContent = '密码错误，请重试';
+          document.querySelectorAll('.lock-dot').forEach(d => d.classList.remove('filled'));
+          lockInput = '';
+          // re-trigger animation
+          const err = document.getElementById('lock-error');
+          err.style.animation = 'none';
+          void err.offsetWidth;
+          err.style.animation = '';
+        }
+      }, 150);
+    }
+  }
+
+  function lockDel() {
+    if (lockInput.length === 0) return;
+    document.getElementById(`dot-${lockInput.length - 1}`).classList.remove('filled');
+    lockInput = lockInput.slice(0, -1);
+    document.getElementById('lock-error').textContent = '';
+  }
+
+  // 支持键盘输入密码
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('lock-screen').classList.contains('hidden')) return;
+    if (e.key >= '0' && e.key <= '9') lockPress(e.key);
+    if (e.key === 'Backspace') lockDel();
+  });
+
+  // ======= 扑克时钟 =======
   const BLINDS = [];
   for (let sb = 100; sb <= 1900; sb += 100) BLINDS.push({ sb, bb: sb * 2 });
 
