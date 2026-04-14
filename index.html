@@ -135,30 +135,41 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     .blind-now-big {
-      color: rgba(255,255,255,0.6);
-      font-size: clamp(18px, 3vw, 38px);
-      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      font-size: clamp(28px, 5vw, 64px);
+      font-weight: 700;
       letter-spacing: 2px;
     }
 
-    /* 右列 — 下一级别 */
+    .next-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      margin-top: 4px;
+    }
+    .next-label {
+      color: #c9953a;
+      font-size: clamp(10px, 1.1vw, 14px);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .next-value {
+      color: rgba(245,240,232,0.45);
+      font-size: clamp(16px, 2.4vw, 32px);
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* 右列 — 筹码 2×2 */
     .col-next {
       border-left: 1px solid rgba(201,149,58,0.15);
     }
 
-    .next-label {
-      color: #c9953a;
-      font-size: clamp(12px, 1.4vw, 18px);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .next-value {
-      color: rgba(245,240,232,0.5);
-      font-size: clamp(24px, 4vw, 52px);
-      font-weight: 700;
-      letter-spacing: 1px;
+    /* 筹码 2×2 网格 */
+    .chips-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 6px;
+      align-items: center;
+      justify-items: center;
     }
 
     /* 可编辑桌名 */
@@ -193,23 +204,16 @@
       flex-shrink: 0;
     }
 
-    /* 筹码行 */
-    .chips-row {
-      display: flex;
-      gap: 14px;
-      align-items: flex-end;
-    }
-
     .chip-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
 
     .chip-wrap svg {
-      width: clamp(70px, 10vw, 120px);
-      height: clamp(70px, 10vw, 120px);
+      width: clamp(50px, 7vw, 90px);
+      height: clamp(50px, 7vw, 90px);
       filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
     }
 
@@ -492,19 +496,21 @@
 
   <!-- 中：计时器 -->
   <div class="col col-timer">
-    <div class="level-info" id="level-info">LEVEL 1 / 19</div>
+    <div class="level-info" id="level-info">LEVEL 1 / 25</div>
     <div class="progress-wrap" style="width:180px;margin-bottom:6px">
       <div class="progress-fill" id="prog" style="width:100%"></div>
     </div>
     <div class="timer-digits" id="timer">5:00</div>
     <div class="blind-now-big" id="blind-now">100 / 200</div>
-    <div class="chips-row" id="chips-row"></div>
+    <div class="next-wrap">
+      <div class="next-label">下一级别</div>
+      <div class="next-value" id="blind-next">200 / 400</div>
+    </div>
   </div>
 
-  <!-- 右：下一级别 -->
+  <!-- 右：筹码 2×2 -->
   <div class="col col-next">
-    <div class="next-label">下一级别</div>
-    <div class="next-value" id="blind-next">200 / 400</div>
+    <div class="chips-grid" id="chips-grid"></div>
   </div>
 
 </div>
@@ -571,24 +577,27 @@
   }
 
   const CHIPS = [
-    { bg:'#f07820', ring:'#b84e08', band:'#c05a10', label:'100'   },
-    { bg:'#5848b8', ring:'#362898', band:'#362898', label:'1000'  },
-    { bg:'#cc1020', ring:'#880010', band:'#880010', label:'5000'  },
-    { bg:'#282828', ring:'#101010', band:'#101010', label:'20000' },
+    { bg:'#282828', ring:'#101010', band:'#101010', label:'100'  },
+    { bg:'#cc1020', ring:'#880010', band:'#880010', label:'500'  },
+    { bg:'#f07820', ring:'#b84e08', band:'#c05a10', label:'1000' },
+    { bg:'#5848b8', ring:'#362898', band:'#362898', label:'5000' },
   ];
 
-  const row = document.getElementById('chips-row');
+  const grid = document.getElementById('chips-grid');
   CHIPS.forEach(c => {
     const wrap = document.createElement('div');
     wrap.className = 'chip-wrap';
     wrap.innerHTML = chipSVG(c.bg, c.ring, c.band, c.label) +
       `<div class="chip-label">${c.label}</div>`;
-    row.appendChild(wrap);
+    grid.appendChild(wrap);
   });
 
   // ── 时钟 ──
-  const BLINDS_ALL = [];
-  for (let sb = 100; sb <= 1900; sb += 100) BLINDS_ALL.push({ sb, bb: sb * 2 });
+  const BLINDS_ALL = [
+    100,200,300,400,500,600,700,800,900,1000,
+    1500,2000,3000,4000,5000,6000,7000,8000,9000,10000,
+    15000,20000,30000,40000,50000
+  ].map(sb => ({ sb, bb: sb * 2 }));
 
   // 默认全部启用
   const activeFlags = BLINDS_ALL.map(() => true);
