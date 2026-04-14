@@ -206,9 +206,9 @@
     }
 
     .chip-wrap svg {
-      width: clamp(52px, 7vw, 80px);
-      height: clamp(52px, 7vw, 80px);
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+      width: clamp(70px, 10vw, 120px);
+      height: clamp(70px, 10vw, 120px);
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
     }
 
     .chip-label {
@@ -258,6 +258,27 @@
       text-align:center; font-size:14px; font-family:'Oswald',sans-serif; font-weight:bold;
     }
     .settings-input:focus { outline:none; border-color:#c9953a; }
+
+    /* 右下角浮动加减酒 */
+    .cup-float {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 50;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(201,149,58,0.3);
+      border-radius: 12px;
+      padding: 8px 14px;
+    }
+    .cup-float-label {
+      color: #c9953a;
+      font-size: clamp(11px, 1.2vw, 15px);
+      letter-spacing: 2px;
+    }
+    body.tv-mode .cup-float { display: none; }
 
     /* TV模式切换 */
     .tv-btn {
@@ -372,16 +393,13 @@
     </div>
     <div class="cups-label">总杯数</div>
     <div class="cups-number" id="cups">0</div>
-    <div class="cup-btns controls-area">
-      <button class="btn btn-cup-sub" onclick="changeCup(-1)">−</button>
-      <button class="btn btn-cup-add" onclick="changeCup(1)">+</button>
-    </div>
   </div>
 
   <!-- 中：计时器 -->
   <div class="col col-timer">
     <div class="timer-digits" id="timer">5:00</div>
     <div class="blind-now-big" id="blind-now">100 / 200</div>
+    <div class="chips-row" id="chips-row"></div>
   </div>
 
   <!-- 右：下一级别 -->
@@ -392,11 +410,15 @@
 
 </div>
 
+<!-- 右下角浮动加减酒 -->
+<div class="cup-float controls-area">
+  <span class="cup-float-label">总杯数</span>
+  <button class="btn btn-cup-sub" onclick="changeCup(-1)">−</button>
+  <button class="btn btn-cup-add" onclick="changeCup(1)">+</button>
+</div>
+
 <!-- 底栏 -->
 <div class="bottombar">
-  <!-- 筹码 -->
-  <div class="chips-row" id="chips-row"></div>
-
   <!-- 控制按钮 -->
   <div class="controls-area">
     <button class="btn btn-start" onclick="startTimer()">▶ 开始</button>
@@ -512,6 +534,8 @@
   function resetTimer() {
     clearInterval(S.iv); S.running = false;
     S.level = 0; S.timeLeft = S.duration;
+    S.cups = 0;
+    document.getElementById('cups').textContent = 0;
     document.getElementById('fin').classList.remove('show');
     render();
   }
